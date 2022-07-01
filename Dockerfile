@@ -1,37 +1,19 @@
-FROM continuumio/miniconda3:4.9.2-alpine
+FROM python:3-slim AS builder
+ADD . /app
+WORKDIR /app
 
-RUN apk update && apk add --no-cache bash \
-        alsa-lib \
-        at-spi2-atk \
-        atk \
-        cairo \
-        cups-libs \
-        dbus-libs \
-        eudev-libs \
-        expat \
-        flac \
-        gdk-pixbuf \
-        glib \
-        libgcc \
-        libjpeg-turbo \
-        libpng \
-        libwebp \
-        libx11 \
-        libxcomposite \
-        libxdamage \
-        libxext \
-        libxfixes \
-        tzdata \
-        libexif \
-        udev \
-        xvfb \
-        zlib-dev \
-        chromium \
-        chromium-chromedriver
-RUN apk update
-RUN apk add xvfb
-RUN apk update
-RUN apk add py-pip
-RUN pip install chromedriver-autoinstaller selenium pyvirtualdisplay 
-COPY main.py /opt/main.py
-ENTRYPOINT ["python", "/opt/main.py"]
+# We are installing a dependency here directly into our app source dir
+RUN pip install --target=/app install requests chromedriver-autoinstaller selenium pyvirtualdisplay 
+
+# A distroless container image with Python and some basics like SSL certificates
+# https://github.com/GoogleContainerTools/distroless
+FROM gcr.io/distroless/python3-debian10
+COPY --from=builder /app /app
+WORKDIR /app
+ENV PYTHONPATH /app
+
+RUN apt update
+RUN apt -y install xvfb
+CMD ["/app/main.py"]
+
+
