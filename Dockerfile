@@ -12,8 +12,8 @@ COPY --from=builder /app /app
 WORKDIR /app
 ENV PYTHONPATH /app
 
-RUN apt update
-RUN apt -y install xvfb
+RUN apt-get update
+RUN apt-get install -y xvfb
 CMD ["/app/main.py"]
 
 
