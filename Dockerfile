@@ -15,7 +15,7 @@ RUN  apt-get update \
   && apt-get install -y wget \
   && rm -rf /var/lib/apt/lists/*
 RUN apt-get update
-RUN apt-get install -y --target=/src xvfb
+RUN apt-get install -y xvfb
 
 
 FROM gcr.io/distroless/python3-debian10
