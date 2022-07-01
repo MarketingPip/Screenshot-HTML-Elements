@@ -28,7 +28,8 @@ RUN apk update && apk add --no-cache bash \
         zlib-dev \
         chromium \
         chromium-chromedriver
-RUN apk add --no-cache xvfb
+RUN apk update
+RUN apk add xvfb
 RUN apk update
 RUN apk add py-pip
 RUN pip install chromedriver-autoinstaller selenium pyvirtualdisplay 
