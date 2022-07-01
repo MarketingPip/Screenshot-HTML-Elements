@@ -18,9 +18,20 @@ wait_time = os.environ.get("INPUT_SECONDS")
 PythonScriptPath = os.path.realpath(
     os.path.join(os.getcwd(), os.path.dirname(__file__)))
 print(PythonScriptPath)
-from pyvirtualdisplay import Display
-display = Display(visible=0, size=(1200, 1200))
-display.start()
+#from pyvirtualdisplay import Display
+#display = Display(visible=0, size=(1200, 1200))
+#display.start()
+
+
+from xvfbwrapper import Xvfb
+
+vdisplay = Xvfb()
+vdisplay.start()
+
+# launch stuff inside
+# virtual display here.
+
+
 
 chromedriver_autoinstaller.install()  # Check if the current version of chromedriver exists
                                       # and if it doesn't exist, download it automatically,
