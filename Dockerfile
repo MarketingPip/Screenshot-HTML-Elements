@@ -14,7 +14,10 @@ RUN apt-get install -y \
     xpra \
     xserver-xorg-video-dummy \
     xvfb
-RUN pip install requests chromedriver-autoinstaller selenium xvfbwrapper
+RUN pip install requests 
+RUN pip install chromedriver-autoinstaller 
+RUN pip install selenium 
+RUN pip install pyvirtualdisplay 
 
 ## TEST RUNNING FIREFOX
 ADD firefox.py /
