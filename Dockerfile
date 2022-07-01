@@ -41,5 +41,5 @@ RUN chmod +x setup.sh
 ADD xorg.conf /
 ENV DISPLAY :1.0
 
-## RUNNING A WEB PAGE ON FIREFOX
-CMD ["/app/main.py"]
+CMD ["bash","setup.sh"]
+
