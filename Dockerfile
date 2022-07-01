@@ -18,7 +18,7 @@ RUN pip install -r requirements.txt
 
 ## TEST RUNNING FIREFOX
 ADD firefox.py /
-RUN chmod +x firefox.py
+RUN chmod +x main.py
 ADD setup.sh /
 RUN chmod +x setup.sh
 ADD xorg.conf /
