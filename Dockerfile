@@ -13,10 +13,17 @@ RUN wget -nc -P /tmp/bitnami/pkg/cache/ https://downloads.bitnami.com/files/stac
 RUN apt-get update && apt-get upgrade -y && \
     rm -r /var/lib/apt/lists /var/cache/apt/archives
     
+RUN apt-get update
+RUN apt-get install -y \
+    dbus-x11 \
+    python-pip \
+    xserver-xorg-video-dummy \
+    xvfb
+
+
 
 ADD xorg.conf /
 ENV DISPLAY :1.0
-WORKDIR /app
 CMD [ "python main.py" ]
 
 # make some useful symlinks that are expected to exist ("/usr/local/bin/python" and friends)
