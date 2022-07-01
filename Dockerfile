@@ -26,6 +26,7 @@ ADD setup.sh /
 RUN chmod +x setup.sh
 ADD xorg.conf /
 ENV DISPLAY :1.0
-RUN pip install -r requirements.txt 
+RUN export PYTHONPATH=/usr/bin/python \
+ && pip install -r requirements.txt
 ## RUNNING A WEB PAGE ON FIREFOX
 CMD ["bash","setup.sh"]
