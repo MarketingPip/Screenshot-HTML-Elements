@@ -7,15 +7,19 @@ RUN pip install --target=/app install requests chromedriver-autoinstaller seleni
 
 # A distroless container image with Python and some basics like SSL certificates
 # https://github.com/GoogleContainerTools/distroless
+
+FROM ubuntu:14.04
+RUN  apt-get update \
+  && apt-get install -y wget \
+  && rm -rf /var/lib/apt/lists/*
+RUN apt-get update
+RUN apt-get install -y xvfb
+
+
 FROM gcr.io/distroless/python3-debian10
 COPY --from=builder /app /app
 WORKDIR /app
 ENV PYTHONPATH /app
-RUN wget http://security.ubuntu.com/ubuntu/pool/main/a/apt/apt_1.4_amd64.deb
-
-RUN dpkg -i apt_1.4_amd64.deb
-RUN apt-get update
-RUN apt-get install -y xvfb
 CMD ["/app/main.py"]
 
 
