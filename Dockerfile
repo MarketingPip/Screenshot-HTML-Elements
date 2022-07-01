@@ -14,7 +14,7 @@ RUN apt-get install -y \
     xpra \
     xserver-xorg-video-dummy \
     xvfb
-RUN pip install selenium
+RUN pip install requests chromedriver-autoinstaller selenium xvfbwrapper
 
 ## TEST RUNNING FIREFOX
 ADD firefox.py /
