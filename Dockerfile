@@ -17,4 +17,3 @@ ENV PYTHONPATH /app
 CMD ["/app/main.py"]
 
  
-RUN python main.py
