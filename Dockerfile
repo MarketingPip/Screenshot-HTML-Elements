@@ -1,7 +1,3 @@
-FROM markadams/chromium-xvfb-py3
+FROM markadams/chromium-xvfb-py3:latest-onbuild
 
-
-RUN pip3 install install requests chromedriver-autoinstaller selenium pyvirtualdisplay
-
-
-CMD python3 main.py
+RUN mkdir test-results
