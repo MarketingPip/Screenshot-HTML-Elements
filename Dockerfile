@@ -8,6 +8,24 @@ RUN pip install --target=/app install requests chromedriver-autoinstaller seleni
 # A distroless container image with Python and some basics like SSL certificates
 
 
+
+FROM python:3-slim AS builder
+ADD . /app
+WORKDIR /app
+
+# We are installing a dependency here directly into our app source dir
+RUN pip install --target=/app install requests chromedriver-autoinstaller selenium pyvirtualdisplay 
+
+# A distroless container image with Python and some basics like SSL certificates
+# https://github.com/GoogleContainerTools/distroless
+
+
+
+
+
+
+
+
 FROM ubuntu:14.04
 MAINTAINER Patrick Merlot <patrick.merlot@gmail.com>
 COPY --from=builder /app /app
@@ -22,9 +40,7 @@ ENV PYTHONPATH /app
 RUN apt-get update
 RUN apt-get install -y \
     dbus-x11 \
-    firefox \
     python-pip \
-    xpra \
     xserver-xorg-video-dummy \
     xvfb
 
@@ -36,4 +52,4 @@ ADD xorg.conf /
 ENV DISPLAY :1.0
 
 ## RUNNING A WEB PAGE ON FIREFOX
-CMD ["bash","setup.sh"]
+CMD ["/app/main.py"]
