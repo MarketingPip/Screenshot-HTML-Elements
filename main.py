@@ -15,8 +15,7 @@ wait_time = os.environ.get("INPUT_SECONDS")
 
 
 
-PythonScriptPath = os.path.realpath(
-    os.path.join(os.getcwd(), os.path.dirname(__file__)))
+PythonScriptPath = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 print(PythonScriptPath)
 from pyvirtualdisplay import Display
 display = Display(visible=0, size=(1200, 1200))
@@ -72,7 +71,7 @@ FileNames = input_variable
 
 Files = FileNames.split('.')
 ReplaceText = ".html"
-Type = f"file:///home/runner/work/{input_variable4}/{input_variable4}/"
+Type = f"http://"
 Type2 = ".html"
 Sleep = 5
     
