@@ -1,143 +1,137 @@
-# -*- coding: utf-8 -*-
-#
-# This software may be modified and distributed under the terms
-# of the MIT license.  See the LICENSE file for details.
-#
-# Multistage Dockerfile to build a Python 3.10 image based on Debian Buster.
-# Inspired by https://github.com/docker-library/python/blob/master/3.9/buster/slim/Dockerfile
-# Notable changes:
-# - adapted to multistage build
-# - removed cleanup steps in builder image for readibility
-# - build without tk, ncurses and readline
+FROM metabrainz/consul-template-base:v0.18.5-2
 
-ARG BASE_IMAGE_NAME=ubuntu:18.04
+# This Dockerfile is based on
+# https://github.com/docker-library/python/blob/32b69d61f6/3.8/buster/Dockerfile
 
-# Intermediate build container
-FROM $BASE_IMAGE_NAME AS builder
-
-# Set Python and Pip versions
-ENV PYTHON_VERSION=3.10.0
-ENV PYTHON_PIP_VERSION=21.3.1
-
-ENV GPG_KEY=A035C8C19219BA821ECEA86B64E628F8D684696D
-# https://github.com/pypa/get-pip
-ENV PYTHON_GET_PIP_URL https://raw.githubusercontent.com/pypa/get-pip/${PYTHON_PIP_VERSION}/public/get-pip.py
-ENV PYTHON_GET_PIP_SHA256=c518250e91a70d7b20cceb15272209a4ded2a0c263ae5776f129e0d9b5674309
-
-ARG BASE_IMAGE_NAME
-RUN echo "Using base image \"${BASE_IMAGE_NAME}\" to build Python ${PYTHON_VERSION}"
+# Ensure that local Python build is preferred over whatever might come with the base image
+ENV PATH /usr/local/bin:$PATH
 
 # http://bugs.python.org/issue19846
 # > At the moment, setting "LANG=C" on a Linux system *fundamentally breaks Python 3*, and that's not OK.
-ENV LANG=C.UTF-8
-ENV DEBIAN_FRONTEND=noninteractive
+ENV LANG C.UTF-8
 
-# Install build dependencies
-RUN set -e && \
-	apt-get update && apt-get install --assume-yes --no-install-recommends \
-		ca-certificates \
-		dirmngr \
-		dpkg-dev \
-		gcc \
-		gnupg \
+# Runtime dependencies. This includes the core packages for all of the buildDeps listed
+# below. We explicitly install them so that when we `remove --auto-remove` the dev packages,
+# these packages stay installed.
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+                       ca-certificates \
+                       netbase \
+                       libbz2-1.0 \
+                       libexpat1 \
+                       libffi6 \
+                       libgdbm3 \
+                       liblzma5 \
+                       libncursesw5 \
+                       libreadline6 \
+                       libsqlite3-0 \
+                       libssl1.0.0 \
+                       libuuid1 \
+                       tcl \
+                       tk \
+                       zlib1g \
+	&& rm -rf /var/lib/apt/lists/*
+
+ENV GPG_KEY E3FF2839C048B25C084DEBE9B26995E310250568
+ENV PYTHON_VERSION 3.8.6
+
+# The list of build dependencies comes from the python-docker slim version:
+# https://github.com/docker-library/python/blob/32b69d61f6/3.8/buster/slim/Dockerfile#L29
+RUN set -ex \
+	&& buildDeps=' \
+		build-essential \
 		libbz2-dev \
-		libc6-dev \
 		libexpat1-dev \
 		libffi-dev \
+		libgdbm-dev \
 		liblzma-dev \
+		libncursesw5-dev \
+		libreadline-dev \
 		libsqlite3-dev \
 		libssl-dev \
-		make \
-		netbase \
+		tk-dev \
+		tcl-dev \
 		uuid-dev \
-		wget \
 		xz-utils \
-		zlib1g-dev
-
-# Download Python source and verify signature with GPG
-RUN wget --no-verbose --output-document=python.tar.xz "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz" \
-	&& wget --no-verbose --output-document=python.tar.xz.asc "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz.asc" \
+		zlib1g-dev \
+	' \
+	&& apt-get update \
+	&& apt-get install -y $buildDeps --no-install-recommends \
+    \
+	&& wget -O python.tar.xz "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz" \
+	&& wget -O python.tar.xz.asc "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz.asc" \
 	&& export GNUPGHOME="$(mktemp -d)" \
-	&& gpg --batch --keyserver keys.openpgp.org --recv-keys "$GPG_KEY" \
+	&& gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys "$GPG_KEY" \
 	&& gpg --batch --verify python.tar.xz.asc python.tar.xz \
 	&& { command -v gpgconf > /dev/null && gpgconf --kill all || :; } \
 	&& rm -rf "$GNUPGHOME" python.tar.xz.asc \
 	&& mkdir -p /usr/src/python \
 	&& tar -xJC /usr/src/python --strip-components=1 -f python.tar.xz \
-	&& rm python.tar.xz
-
-# Compile Python source
-RUN cd /usr/src/python \
+	&& rm python.tar.xz \
+	\
+	&& cd /usr/src/python \
 	&& gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" \
 	&& ./configure \
 		--build="$gnuArch" \
-		--prefix="/python" \
 		--enable-loadable-sqlite-extensions \
 		--enable-optimizations \
-		--enable-ipv6 \
-		--disable-shared \
+		--enable-option-checking=fatal \
+		--enable-shared \
 		--with-system-expat \
 		--with-system-ffi \
 		--without-ensurepip \
-	&& make -j "$(nproc)" LDFLAGS="-Wl,--strip-all" \
-	&& make install
+	&& make -j "$(nproc)" \
+	&& make install \
+	&& ldconfig \
+	\
+	&& find /usr/local -depth \
+		\( \
+			\( -type d -a \( -name test -o -name tests -o -name idle_test \) \) \
+			-o \
+			\( -type f -a \( -name '*.pyc' -o -name '*.pyo' \) \) \
+		\) -exec rm -rf '{}' + \
+	&& rm -rf /usr/src/python \
+	\
+	&& apt-get purge -y --auto-remove $buildDeps \
+	&& rm -rf /var/lib/apt/lists/* \
+	\
+	&& python3 --version
+
+
+# make some useful symlinks that are expected to exist
+RUN cd /usr/local/bin \
+	&& ln -s idle3 idle \
+	&& ln -s pydoc3 pydoc \
+	&& ln -s python3 python \
+	&& ln -s python3-config python-config
 
 # Install pip
+ENV PYTHON_PIP_VERSION 20.2.3
+# https://github.com/pypa/get-pip
+ENV PYTHON_GET_PIP_URL https://github.com/pypa/get-pip/raw/ffe826207a010164265d9cc807978e3604d18ca0/get-pip.py
+ENV PYTHON_GET_PIP_SHA256 b86f36cc4345ae87bfd4f10ef6b2dbfa7a872fbff70608a1e43944d283fd0eee
+
 RUN set -ex; \
 	\
-	wget --no-verbose --output-document=get-pip.py "$PYTHON_GET_PIP_URL"; \
-	echo "$PYTHON_GET_PIP_SHA256 *get-pip.py" | sha256sum --check --strict -; \
+  wget -O get-pip.py "$PYTHON_GET_PIP_URL"; \
+  echo "$PYTHON_GET_PIP_SHA256 *get-pip.py" | sha256sum --check --strict -; \
 	\
-	/python/bin/python3 get-pip.py \
+	python get-pip.py \
 		--disable-pip-version-check \
 		--no-cache-dir \
-		"pip==$PYTHON_PIP_VERSION" "wheel"
-
-# Remove unecessary libraries
-RUN find /python/lib -type d -a \( \
-		-name __pycache__ -o \
-		-name test -o \
-		-name tests -o \
-		-name idlelib -o \
-		-name idle_test -o \
-		-name turtledemo -o \
-		-name pydoc_data -o \
-		-name tkinter \) \
-		-exec rm -rf '{}' +
-
-RUN find /python/lib -type f -a \( \
-		-name '*.a' -o \
-		-name '*.pyc' -o \
-		-name '*.pyo' -o \
-		-name '*.exe' \) \
-		-exec rm '{}' +
-
-# App container
-FROM $BASE_IMAGE_NAME AS app
-
-ENV LANG=C.UTF-8 \
-    DEBIAN_FRONTEND=noninteractive \
-    PIP_NO_CACHE_DIR=true
-
-# Create symlinks that are expected to exist
-RUN ln -s /python/bin/python3-config /usr/local/bin/python-config && \
-	ln -s /python/bin/python3 /usr/local/bin/python && \
-	ln -s /python/bin/python3 /usr/local/bin/python3 && \
-	ln -s /python/bin/pip3 /usr/local/bin/pip && \
-	ln -s /python/bin/pip3 /usr/local/bin/pip3 && \
-	# Install dependencies
-	apt-get update && \
-	apt-get install --assume-yes --no-install-recommends ca-certificates libexpat1 libsqlite3-0 libssl1.1 && \
-	apt-get purge --assume-yes --auto-remove -o APT::AutoRemove::RecommendsImportant=false && \
-	rm -rf /var/lib/apt/lists/*
-
-
-#CMD ["apt-get update"]
-#CMD ["apt-get install -y xvfb"]
-# Copy Python files
-COPY --from=builder /python /python
+		"pip==$PYTHON_PIP_VERSION" \
+	; \
+	pip --version; \
+	\
+	find /usr/local -depth \
+		\( \
+			\( -type d -a \( -name test -o -name tests -o -name idle_test \) \) \
+			-o \
+			\( -type f -a \( -name '*.pyc' -o -name '*.pyo' \) \) \
+		\) -exec rm -rf '{}' +; \
+	rm -f get-pip.py
 RUN pip install --target=/app install requests chromedriver-autoinstaller selenium pyvirtualdisplay 
-CMD ["python3 main.py"]
+CMD ["python main.py"]
 
 
 # A distroless container image with Python and some basics like SSL certificates
