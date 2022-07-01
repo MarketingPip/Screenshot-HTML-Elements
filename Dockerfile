@@ -1,4 +1,5 @@
 FROM continuumio/miniconda3:4.9.2-alpine
+RUN apk add --no-cache xvfb
 RUN apk update
 RUN apk add py-pip
 RUN pip install chromedriver-autoinstaller selenium pyvirtualdisplay 
