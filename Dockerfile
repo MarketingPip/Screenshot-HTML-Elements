@@ -8,16 +8,6 @@ RUN pip install --target=/app install requests chromedriver-autoinstaller seleni
 # A distroless container image with Python and some basics like SSL certificates
 
 
-
-FROM python:3-slim AS builder
-ADD . /app
-WORKDIR /app
-
-# We are installing a dependency here directly into our app source dir
-RUN pip install --target=/app install requests chromedriver-autoinstaller selenium pyvirtualdisplay 
-
-
-
 FROM ubuntu:14.04
 MAINTAINER Patrick Merlot <patrick.merlot@gmail.com>
 COPY --from=builder /app /app
