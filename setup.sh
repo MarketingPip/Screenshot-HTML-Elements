@@ -6,4 +6,4 @@ export DISPLAY
 echo $DISPLAY
 Xvfb :1 -screen 0 1024x768x24 -extension RANDR &> xvfb.log &
 #xhost +
-python main.py
+python /app/main.py
