@@ -14,15 +14,18 @@ RUN apt-get install -y \
     xpra \
     xserver-xorg-video-dummy \
     xvfb
-RUN pip install -r requirements.txt
+
 
 ## TEST RUNNING FIREFOX
-ADD firefox.py /
+ADD requirements.txt /
+RUN chmod +x requirements.txt
+
+ADD main.py /
 RUN chmod +x main.py
 ADD setup.sh /
 RUN chmod +x setup.sh
 ADD xorg.conf /
 ENV DISPLAY :1.0
-
+RUN pip install -r requirements.txt 
 ## RUNNING A WEB PAGE ON FIREFOX
 CMD ["bash","setup.sh"]
