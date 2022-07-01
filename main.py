@@ -47,9 +47,9 @@ for option in options:
 input_variable = wait_time 
 
 
-input_variable2 = "Guestbook_Python"
+input_variable2 = ""
 
-input_variable4 = os.environ['INPUT_STORE4']
+input_variable4 = "Guestbook_Python"
 
 
 
