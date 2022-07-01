@@ -71,7 +71,7 @@ FileNames = input_variable
 
 Files = FileNames.split('.')
 ReplaceText = ".html"
-Type = f"http://"
+Type = "http://"
 Type2 = ".html"
 Sleep = 5
     
