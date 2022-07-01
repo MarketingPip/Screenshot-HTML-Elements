@@ -1,19 +1,18 @@
-FROM python:3-slim AS builder
-ADD . /app
-WORKDIR /app
+FROM markadams/chromium-xvfb
 
-# We are installing a dependency here directly into our app source dir
-RUN pip install --target=/app install requests chromedriver-autoinstaller selenium xvfbwrapper
+RUN apt-get update && apt-get install -y \
+    python3 python3-pip curl unzip libgconf-2-4
 
-# A distroless container image with Python and some basics like SSL certificates
-# https://github.com/GoogleContainerTools/distroless
+RUN pip3 install install requests chromedriver-autoinstaller selenium xvfbwrapper
 
+ENV CHROMEDRIVER_VERSION 2.36
+ENV CHROMEDRIVER_SHA256 2461384f541346bb882c997886f8976edc5a2e7559247c8642f599acd74c21d4
 
-FROM markadams/chromium-xvfb-py3:latest-onbuild
-COPY --from=builder /app /app
-WORKDIR /app
-ENV PYTHONPATH /app
+RUN curl -SLO "https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip" \
+  && echo "$CHROMEDRIVER_SHA256  chromedriver_linux64.zip" | sha256sum -c - \
+  && unzip "chromedriver_linux64.zip" -d /usr/local/bin \
+  && rm "chromedriver_linux64.zip"
 
-#RUN apt-get update
-#RUN apt-get install -y xvfb
-CMD ["/app/main.py"]
+WORKDIR /usr/src/app
+
+CMD python3 main.py
