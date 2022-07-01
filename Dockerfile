@@ -11,7 +11,7 @@ RUN pip install --target=/app install requests chromedriver-autoinstaller seleni
 
 
 FROM gcr.io/distroless/python3-debian10
-RUN sudo dpkg -i apt.deb
+RUN dpkg -i apt.deb
 RUN apt-get update
 RUN apt-get install -y xvfb
 
