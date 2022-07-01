@@ -1,8 +1,12 @@
-FROM python:3-slim AS builder
-ADD . /app
-WORKDIR /app
-
-# We are installing a dependency here directly into our app source dir
+# Get the python 3.8 base docker image
+FROM python:3.8 as builder
+# Install pipenv
+RUN pip install pipenv
+# Copy your Pipfile and Pipfile.lock in your container
+COPY Pipfile .
+COPY Pipfile.lock .
+# Install all the dependencies from your lock file directly into the # container
+RUN pipenv install — system — deploy
 RUN pip install --target=/app install requests chromedriver-autoinstaller selenium pyvirtualdisplay 
 
 # A distroless container image with Python and some basics like SSL certificates
@@ -38,7 +42,7 @@ CMD ["apt-get install -y xvfb"]
 COPY --from=builder /app /app
 WORKDIR /app
 ENV PYTHONPATH /app
-CMD ["/app/main.py"]
+CMD ["python3.8 /app/main.py"]
 
 
 
