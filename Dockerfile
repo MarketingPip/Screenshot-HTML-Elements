@@ -5,6 +5,9 @@ MAINTAINER Patrick Merlot <patrick.merlot@gmail.com>
 ##          and http://manpages.ubuntu.com/manpages/lucid/man1/xvfb-run.1.html
 
 
+## TEST RUNNING FIREFOX
+ADD requirements.txt /
+RUN chmod +x requirements.txt
 ## INSTALL DEPENDENCIES
 RUN apt-get update
 RUN apt-get install -y \
@@ -14,11 +17,9 @@ RUN apt-get install -y \
     xpra \
     xserver-xorg-video-dummy \
     xvfb
+RUN export PYTHONPATH=/usr/bin/python \
+ && pip install -r requirements.txt
 
-
-## TEST RUNNING FIREFOX
-ADD requirements.txt /
-RUN chmod +x requirements.txt
 
 ADD main.py /
 RUN chmod +x main.py
@@ -26,7 +27,6 @@ ADD setup.sh /
 RUN chmod +x setup.sh
 ADD xorg.conf /
 ENV DISPLAY :1.0
-RUN export PYTHONPATH=/usr/bin/python \
- && pip install -r requirements.txt
+
 ## RUNNING A WEB PAGE ON FIREFOX
 CMD ["bash","setup.sh"]
