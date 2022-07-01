@@ -1,36 +1,28 @@
-FROM debian:stable as display
-ADD . /app
-WORKDIR /app
-RUN apt-get update && apt-get install  -y curl xvfb chromium
-#COPY pin_nodesource /etc/apt/preferences.d/nodesource
+FROM ubuntu:14.04
+MAINTAINER Patrick Merlot <patrick.merlot@gmail.com>
 
-ADD xvfb-chromium /usr/bin/xvfb-chromium
-RUN ln -s /usr/bin/xvfb-chromium /usr/bin/google-chrome
-RUN ln -s /usr/bin/xvfb-chromium /usr/bin/chromium-browser
+## inspired from  https://linuxmeerkat.wordpress.com/2014/10/17/running-a-gui-application-in-a-docker-container/
+##          and http://manpages.ubuntu.com/manpages/lucid/man1/xvfb-run.1.html
 
 
+## INSTALL DEPENDENCIES
+RUN apt-get update
+RUN apt-get install -y \
+    dbus-x11 \
+    firefox \
+    python-pip \
+    xpra \
+    xserver-xorg-video-dummy \
+    xvfb
+RUN pip install selenium
 
+## TEST RUNNING FIREFOX
+ADD firefox.py /
+RUN chmod +x firefox.py
+ADD setup.sh /
+RUN chmod +x setup.sh
+ADD xorg.conf /
+ENV DISPLAY :1.0
 
-FROM python:3-slim AS builder
-ADD . /app
-WORKDIR /app
-
-# We are installing a dependency here directly into our app source dir
-RUN pip install --target=/app install requests chromedriver-autoinstaller selenium xvfbwrapper
-
-# A distroless container image with Python and some basics like SSL certificates
-
-
-
-FROM gcr.io/distroless/python3-debian10
-
-
-
-COPY --from=display /app /app
-WORKDIR /app
-
-COPY --from=builder /app /app
-WORKDIR /app
-ENV PYTHONPATH /app
-CMD ["/app/main.py"]
- 
+## RUNNING A WEB PAGE ON FIREFOX
+CMD ["bash","setup.sh"]
