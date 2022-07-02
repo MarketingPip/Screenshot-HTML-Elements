@@ -53,8 +53,6 @@ RUN echo "===> Installing system dependencies..." && \
     \
     echo "===> Remove build dependencies..." && \
     apt-get remove -y $BUILD_DEPS && rm -rf /var/lib/apt/lists/*
-
-
 ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
 ENV PYTHONUNBUFFERED=1
@@ -65,7 +63,6 @@ WORKDIR /$APP_HOME
 COPY . $APP_HOME/
 
 CMD tail -f /dev/null
-ENV PYTHONUNBUFFERED=1
 
 # upgrade pip
 RUN pip install --upgrade pip
