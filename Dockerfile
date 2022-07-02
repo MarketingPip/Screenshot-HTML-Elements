@@ -1,6 +1,10 @@
 FROM ubuntu:focal
-
+# The "./" is the working directory e.g. /usr/app
+USER root
+RUN chmod a+w ./ -R
 ARG DEBIAN_FRONTEND=noninteractive
+
+
 RUN echo "===> Installing system dependencies..." && \
     BUILD_DEPS="curl unzip" && \
     apt-get update && apt-get install --no-install-recommends -y \
