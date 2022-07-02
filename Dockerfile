@@ -18,7 +18,7 @@ ENV DISPLAY=:99
 # upgrade pip
 RUN pip install --upgrade pip
 
-RUN pip install requests webdriver-manager selenium pyvirtualdisplay pyscreenshot
+RUN pip install requests chromedriver_autoinstaller selenium pyvirtualdisplay pyscreenshot
 
 
 ADD main.py /
