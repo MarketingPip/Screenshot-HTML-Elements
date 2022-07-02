@@ -20,7 +20,7 @@ RUN apk add --no-cache xvfb
 
 ADD xorg.conf /
 ENV DISPLAY :1.0
-RUN python main.py
+RUN python3 main.py
 
 # make some useful symlinks that are expected to exist ("/usr/local/bin/python" and friends)
 
