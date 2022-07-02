@@ -1,8 +1,4 @@
-FROM ubuntu:focal
-# The "./" is the working directory e.g. /usr/app
-USER root
-RUN chmod a+w ./ -R
-ARG DEBIAN_FRONTEND=noninteractive
+FROM ubuntu:14.04
 
 
 RUN echo "===> Installing system dependencies..." && \
