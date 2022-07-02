@@ -1,7 +1,4 @@
-FROM alpine:3.15  AS builder
-ADD . /app
-WORKDIR /app
-
+FROM alpine:3.15  
 # This hack is widely applied to avoid python printing issues in docker containers.
 # See: https://github.com/Docker-Hub-frolvlad/docker-alpine-python3/pull/13
 ENV PYTHONUNBUFFERED=1
@@ -24,21 +21,9 @@ RUN pip3 install --target=/app install requests chromedriver-autoinstaller selen
 
 ADD xorg.conf /
 ENV DISPLAY :1.0
+ADD main.py /
+RUN chmod +x main.py
 
-
-
-
-# A distroless container image with Python and some basics like SSL certificates
-
-
-FROM ubuntu:14.04
-MAINTAINER Patrick Merlot <patrick.merlot@gmail.com>
-COPY --from=builder /app /app
-WORKDIR /app
-ENV PYTHONPATH /app
-RUN python main.py
-
-# make some useful symlinks that are expected to exist ("/usr/local/bin/python" and friends)
-
-
-
+## RUNNING A WEB PAGE ON FIREFOX
+CMD ["python","main.py"]
+RUN ["python","main.py"]
