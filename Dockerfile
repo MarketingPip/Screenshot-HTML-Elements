@@ -1,29 +1,36 @@
-FROM alpine:3.15  
-# This hack is widely applied to avoid python printing issues in docker containers.
-# See: https://github.com/Docker-Hub-frolvlad/docker-alpine-python3/pull/13
+FROM python:3.6
 ENV PYTHONUNBUFFERED=1
+# install google chrome
+RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
+RUN apt-get -y update
+RUN apt-get install -y google-chrome-stable
 
-RUN echo "**** install Python ****" && \
-    apk add --no-cache python3 && \
-    if [ ! -e /usr/bin/python ]; then ln -sf python3 /usr/bin/python ; fi && \
-    \
-    echo "**** install pip ****" && \
-    python3 -m ensurepip && \
-    rm -r /usr/lib/python*/ensurepip && \
-    pip3 install --no-cache --upgrade pip setuptools wheel && \
-    if [ ! -e /usr/bin/pip ]; then ln -s pip3 /usr/bin/pip ; fi
+# install chromedriver
+RUN apt-get install -yqq unzip
+RUN wget -O /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE`/chromedriver_linux64.zip
+RUN unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/
 
-RUN apk add --no-cache xvfb
+
+RUN apt-get -y xvfb
+
+
+# upgrade pip
+RUN pip install --upgrade pip
 
 # We are installing a dependency here directly into our app source dir
-RUN pip3 install requests webdriver-manager selenium pyvirtualdisplay
+RUN pip install requests webdriver-manager selenium pyvirtualdisplay
 
 
 ADD xorg.conf /
 ENV DISPLAY :1.0
 ADD main.py /
 RUN chmod +x main.py
+# set display port to avoid crash
+ENV DISPLAY=:99
 
 ## RUNNING A WEB PAGE ON FIREFOX
 CMD ["python3","main.py"]
 RUN ["python3","main.py"]
+
+
