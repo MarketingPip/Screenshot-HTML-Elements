@@ -38,6 +38,7 @@ driver = webdriver.Chrome(ChromeDriverManager().install())
 
 chrome_options = webdriver.ChromeOptions()
 options = [
+    "--no-sandbox",
     "--headless",
     "--window-size=1200,1200",
     "--ignore-certificate-errors",
