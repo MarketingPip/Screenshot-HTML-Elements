@@ -21,12 +21,9 @@ RUN pip install --upgrade pip
 RUN pip install requests webdriver-manager selenium pyvirtualdisplay pyscreenshot
 
 
-ADD xorg.conf /
-ENV DISPLAY :1.0
 ADD main.py /
 RUN chmod +x main.py
-# set display port to avoid crash
-ENV DISPLAY=:99
+
 
 ## RUNNING A WEB PAGE ON FIREFOX
 CMD ["python3","main.py"]
