@@ -40,6 +40,7 @@ chromedriver_autoinstaller.install()  # Check if the current version of chromedr
 
 chrome_options = webdriver.ChromeOptions()
 options = [
+    "--disable-dev-shm-usage",
       "--no-sandbox",
     "--headless",
     "--window-size=1200,1200",
