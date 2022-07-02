@@ -11,15 +11,15 @@ RUN apt-get install -yqq unzip
 RUN wget -O /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE`/chromedriver_linux64.zip
 RUN unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/
 
+RUN apt-get install -y xvfb xserver-xephyr vnc4server
 
-RUN apt-get -y xvfb
 
 
 # upgrade pip
 RUN pip install --upgrade pip
 
 # We are installing a dependency here directly into our app source dir
-RUN pip install requests webdriver-manager selenium pyvirtualdisplay
+RUN pip install requests webdriver-manager selenium pyvirtualdisplay pyscreenshot
 
 
 ADD xorg.conf /
