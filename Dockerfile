@@ -16,7 +16,7 @@ RUN echo "**** install Python ****" && \
 RUN apk add --no-cache xvfb
 
 # We are installing a dependency here directly into our app source dir
-RUN pip3 install requests chromedriver-autoinstaller selenium pyvirtualdisplay
+RUN pip3 install requests webdriver-manager selenium pyvirtualdisplay
 
 
 ADD xorg.conf /
