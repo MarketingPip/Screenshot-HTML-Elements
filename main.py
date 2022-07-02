@@ -1,7 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
+import chromedriver_autoinstaller
 import os
 import json
 import sys
@@ -32,14 +32,14 @@ display.start()
 
 
 
+chromedriver_autoinstaller.install()  # Check if the current version of chromedriver exists
+                                      # and if it doesn't exist, download it automatically,
+                                      # then add chromedriver to path
 
-driver = webdriver.Chrome(ChromeDriverManager().install())
 
 
 chrome_options = webdriver.ChromeOptions()
 options = [
-    "--no-sandbox",
-    "--headless",
     "--window-size=1200,1200",
     "--ignore-certificate-errors",
     "--hide-scrollbars"
