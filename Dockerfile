@@ -31,5 +31,7 @@ ENV DBUS_SESSION_BUS_ADDRESS=/dev/null
 
 
 # Bash script to invoke xvfb, any preliminary commands, then invoke project
-COPY run.sh .
-CMD /bin/bash run.sh
+#COPY run.sh .
+#CMD /bin/bash run.sh
+RUN Xvfb :99 -screen 0 640x480x8 -nolisten tcp 
+RUN python3 main.py
