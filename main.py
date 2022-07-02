@@ -59,7 +59,7 @@ for option in options:
 
 input_variable = "https://github.com"
 
-
+input_variable3 = ""
 input_variable2 = ""
 
 input_variable4 = "Guestbook_Python"
