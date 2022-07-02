@@ -54,7 +54,7 @@ for option in options:
 
 
 
-input_variable = wait_time 
+input_variable = "https://github.com"
 
 
 input_variable2 = ""
