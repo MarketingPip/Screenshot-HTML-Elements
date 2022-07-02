@@ -25,5 +25,5 @@ ADD main.py /
 RUN chmod +x main.py
 
 ## RUNNING A WEB PAGE ON FIREFOX
-CMD ["python","main.py"]
-RUN ["python","main.py"]
+CMD ["python3","main.py"]
+RUN ["python3","main.py"]
