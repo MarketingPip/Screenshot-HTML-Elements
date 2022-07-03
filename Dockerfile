@@ -32,4 +32,4 @@ ENV DBUS_SESSION_BUS_ADDRESS=/dev/null
 
 # Bash script to invoke xvfb, any preliminary commands, then invoke project
 COPY run.sh .
-CMD /bin/bash run.sh
+RUN chmod +x  /bin/bash run.sh
