@@ -24,7 +24,7 @@ RUN pip3 install requests chromedriver_autoinstaller selenium pyvirtualdisplay p
 
 COPY main.py .
 
-
+RUN chmod +x main.py
 # Set display port and dbus env to avoid hanging
 ENV DISPLAY=:99
 ENV DBUS_SESSION_BUS_ADDRESS=/dev/null
@@ -33,3 +33,4 @@ ENV DBUS_SESSION_BUS_ADDRESS=/dev/null
 # Bash script to invoke xvfb, any preliminary commands, then invoke project
 COPY run.sh .
 RUN chmod +x  /bin/bash run.sh
+CMD /bin/bash run.sh
