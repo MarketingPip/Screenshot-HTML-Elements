@@ -30,7 +30,8 @@ CMD [ "/bin/bash" ]
 ARG CONDA_VERSION=py39_4.12.0
 # Download, unzip, and install chromedriver
 ENV LATEST_RELEASE=100.0.4896.20/chromedriver_linux64.zip
-RUN wget -O /tmp/chromedriver.zip curl chromedriver.storage.googleapis.com/100.0.4896.20/chromedriver_linux64.zip
+RUN wget -O /tmp/chromedriver.zip 
+RUN curl chromedriver.storage.googleapis.com/100.0.4896.20/chromedriver_linux64.zip
 RUN unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/
 
 
