@@ -12,6 +12,7 @@ RUN apt-get update -q && \
         git \
         libglib2.0-0 \
         libsm6 \
+        libgconf-2-4 \ 
         libxext6 \
         libxrender1 \
         mercurial \
@@ -20,6 +21,8 @@ RUN apt-get update -q && \
         unzip \
         subversion \
         wget \
+        chromium \ 
+        xvfb \ 
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -66,12 +69,12 @@ RUN set -x && \
     /opt/conda/bin/conda clean -afy
 
 ## For chromedriver installation: curl/wget/libgconf/unzip
-RUN apt-get update -y && apt-get install -y wget curl unzip libgconf-2-4
+# RUN apt-get update -y && apt-get install -y wget curl unzip libgconf-2-4
 ## For project usage: python3/python3-pip/chromium/xvfb
-RUN apt-get update -y && apt-get install -y chromium xvfb 
+#RUN apt-get update -y && apt-get install -y chromium xvfb 
 
 ## Your python project dependencies
-RUN pip3 install requests chromedriver_autoinstaller selenium pyvirtualdisplay pyscreenshot
+#RUN pip3 install requests chromedriver_autoinstaller selenium pyvirtualdisplay pyscreenshot
 
 
 
