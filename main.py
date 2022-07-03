@@ -55,10 +55,10 @@ driver = webdriver.Chrome(options = chrome_options)
 
 
 
-input_variable = "https://github.com"
+input_variable = "https://github.com,https://youtube.com,https://google.com,https://facebook.com,"
 
 
-input_variable2 = "demo,"
+input_variable2 = ""
 input_variable3 = "URL"
 input_variable4 = "Screenshot-HTML-Elements"
 
