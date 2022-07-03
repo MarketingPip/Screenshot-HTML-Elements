@@ -17,6 +17,7 @@ RUN apt-get update -q && \
         mercurial \
         openssh-client \
         procps \
+        unzip \
         subversion \
         wget \
     && apt-get clean \
