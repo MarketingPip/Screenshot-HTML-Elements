@@ -55,7 +55,7 @@ driver = webdriver.Chrome(options = chrome_options)
 
 #
 
-input_variable = "https://pornthots.com,"
+input_variable = "https://github.com,"
 
 
 input_variable2 = "demo,"
@@ -77,7 +77,7 @@ if input_variable3 == "URL":
     Type="http://"
     Type2 = ""
     Type2 = Type2.replace(" ", "")
-    Sleep = 15
+    Sleep = 10
 
 
 
