@@ -29,7 +29,7 @@ CMD [ "/bin/bash" ]
 # Leave these args here to better use the Docker build cache
 ARG CONDA_VERSION=py39_4.12.0
 # Download, unzip, and install chromedriver
-ARG LATEST_RELEASE=100.0.4896.20
+ENV LATEST_RELEASE=100.0.4896.20
 RUN wget -O /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE`/chromedriver_linux64.zip
 RUN unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/
 
