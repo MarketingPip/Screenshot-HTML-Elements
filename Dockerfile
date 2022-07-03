@@ -12,17 +12,13 @@ RUN apt-get update -q && \
         git \
         libglib2.0-0 \
         libsm6 \
-        libgconf-2-4 \ 
         libxext6 \
         libxrender1 \
         mercurial \
         openssh-client \
         procps \
-        unzip \
         subversion \
         wget \
-        chromium \ 
-        xvfb \ 
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -33,9 +29,7 @@ CMD [ "/bin/bash" ]
 # Leave these args here to better use the Docker build cache
 ARG CONDA_VERSION=py39_4.12.0
 # Download, unzip, and install chromedriver
-ENV LATEST_RELEASE=100.0.4896.20/chromedriver_linux64.zip
-RUN wget -O /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/100.0.4896.20/chromedriver_linux64.zip
-#RUN curl chromedriver.storage.googleapis.com/
+RUN wget -O /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE`/chromedriver_linux64.zip
 RUN unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/
 
 
@@ -69,12 +63,12 @@ RUN set -x && \
     /opt/conda/bin/conda clean -afy
 
 ## For chromedriver installation: curl/wget/libgconf/unzip
-# RUN apt-get update -y && apt-get install -y wget curl unzip libgconf-2-4
+RUN apt-get update -y && apt-get install -y wget curl unzip libgconf-2-4
 ## For project usage: python3/python3-pip/chromium/xvfb
-#RUN apt-get update -y && apt-get install -y chromium xvfb 
+RUN apt-get update -y && apt-get install -y chromium xvfb 
 
 ## Your python project dependencies
-#RUN pip3 install requests chromedriver_autoinstaller selenium pyvirtualdisplay pyscreenshot
+RUN pip3 install requests chromedriver_autoinstaller selenium pyvirtualdisplay pyscreenshot
 
 
 
