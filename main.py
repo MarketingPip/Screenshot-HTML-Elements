@@ -139,6 +139,7 @@ for s in File_Names_List:
      
        # el = driver.find_element_by_tag_name('body')
         el = driver.save_screenshot(FilePath + ScreenshotPath)
+        driver.save_screenshot(ScreenshotPath)
         print("Screenshot captured")
         print(Link)
         print(ScreenshotPath)
