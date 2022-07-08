@@ -55,7 +55,7 @@ driver = webdriver.Chrome(options = chrome_options)
 
 #
 
-input_variable = "https://github.com,"
+input_variable = "https://github.com/MarketingPipeline,"
 
 
 input_variable2 = "demo,"
