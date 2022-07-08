@@ -55,7 +55,7 @@ driver = webdriver.Chrome(options = chrome_options)
 
 #
 
-input_variable = "https://github.com/,https://google.com,https://youtube.com,https://soundcloud.com"
+input_variable = "https://github.com/,https://google.com,https://youtube.com,https://soundcloud.com,"
 
 
 input_variable2 = "demo,"
@@ -139,7 +139,7 @@ for s in File_Names_List:
      
        # el = driver.find_element_by_tag_name('body')
         el = driver.save_screenshot(FilePath + ScreenshotPath)
-        driver.save_screenshot(ScreenshotPath)
+        driver.save_screenshot("test" + ScreenshotPath)
         print("Screenshot captured")
         print(Link)
         print(ScreenshotPath)
