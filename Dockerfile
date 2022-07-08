@@ -31,14 +31,14 @@ ENV DBUS_SESSION_BUS_ADDRESS=/dev/null
 
 
 # Bash script to invoke xvfb, any preliminary commands, then invoke project
-#COPY run.sh .
-#RUN Xvfb :99 -screen 0 640x480x8 -nolisten tcp & python3 main.py
+COPY entrypoint.sh .
+CMD Xvfb :99 -screen 0 640x480x8 -nolisten tcp & python3 main.py
 #RUN chmod +x  /bin/bash run.sh
 #ENTRYPOINT /bin/bash run.sh
 
 # Copies your code file from your action repository to the filesystem path `/` of the container
 
-COPY entrypoint.sh /entrypoint.sh
+#COPY entrypoint.sh /entrypoint.sh
 
-CMD chmod +x entrypoint.sh
-ENTRYPOINT ["entrypoint.sh"]
+#CMD chmod +x entrypoint.sh
+#ENTRYPOINT ["entrypoint.sh"]
