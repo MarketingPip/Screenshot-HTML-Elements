@@ -8,18 +8,18 @@ from pyvirtualdisplay import Display
 display = Display(visible=0, size=(1200, 1200))
 display.start()
 # Specify resolution
-resolution = (1920, 1080)
+resolution = (1200, 1200)
   
 # Specify video codec
   
 # Specify name of Output file
-filename = "Recording.mp4"
+filename = "Recording.avi"
   
 # Specify frames rate. We can choose any 
 # value and experiment with it
 fps = 60.0
 
-codec = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
+codec = cv2.VideoWriter_fourcc(*"XVID")
   
 # Creating a VideoWriter object
 out = cv2.VideoWriter(filename, codec, fps, resolution)
@@ -56,4 +56,3 @@ out.release()
   
 # Destroy all windows
 cv2.destroyAllWindows()
-exit()
