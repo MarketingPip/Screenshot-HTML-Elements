@@ -7,7 +7,6 @@ import pyscreenshot as ImageGrab
 resolution = (1920, 1080)
   
 # Specify video codec
-codec = cv2.VideoWriter_fourcc(*"XVID")
   
 # Specify name of Output file
 filename = "Recording.avi"
@@ -18,7 +17,7 @@ fps = 60.0
   
   
 # Creating a VideoWriter object
-out = cv2.VideoWriter(filename, codec, fps, resolution)
+out = cv2.VideoWriter(filename, fps, resolution)
   
 # Create an Empty window
 cv2.namedWindow("Live", cv2.WINDOW_NORMAL)
