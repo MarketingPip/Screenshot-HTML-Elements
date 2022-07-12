@@ -19,7 +19,7 @@ filename = "Recording.mp4"
 # value and experiment with it
 fps = 60.0
 
-codec = cv2.VideoWriter_fourcc(*'mp4v')
+codec = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
   
 # Creating a VideoWriter object
 out = cv2.VideoWriter(filename, codec, fps, resolution)
