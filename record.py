@@ -31,7 +31,6 @@ cv2.resizeWindow("Live", 480, 270)
 RecordTime = 10  
 Record = True
 while RecordTime < 0:
-    Time = time.sleep(RecordTime)
     # Take screenshot using PyAutoGUI
     img = ImageGrab.grab() 
   
