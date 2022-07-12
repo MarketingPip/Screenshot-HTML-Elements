@@ -142,7 +142,7 @@ for s in File_Names_List:
         ScreenshotPath = ScreenshotPath.split('.com', 1)[0] + '.png'
         #driver.get('/home/runner/work/ProxyScraper-PY/ProxyScraper-PY/index.html')
         #driver.get("https://marketingpipeline.github.io/Markdown-Tag")
-        stream()
+        exec(open('record.py').read())
         driver.get(Link)
 
         driver.execute_script("document.querySelector('html').style.overflow = 'hidden';")
