@@ -19,7 +19,7 @@ platforms = {
     'netflix' : { 'login': 'https://www.netflix.com/Login', 'watch': 'http://www.netflix.com/watch/' }
 }
 browser = None
-xvfb = "hello"
+xvfb = 159
 
 PythonScriptPath = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 print(PythonScriptPath)
