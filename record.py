@@ -29,7 +29,8 @@ cv2.namedWindow("Live", cv2.WINDOW_NORMAL)
 # Resize this window
 cv2.resizeWindow("Live", 480, 270)
 RecordTime = 10  
-while True:
+Record = True
+while RecordTime < 0:
     Time = time.sleep(RecordTime)
     # Take screenshot using PyAutoGUI
     img = ImageGrab.grab() 
@@ -48,8 +49,7 @@ while True:
     cv2.imshow('Live', frame)
       
     # Stop recording when we press 'q'
-    if Time == 0:
-        break
+    RecordTime - 1 
   
 # Release the Video writer
 out.release()
