@@ -19,7 +19,7 @@ WORKDIR /opt/app
 
 ## Your python project dependencies
 
-RUN pip3 install requests chromedriver_autoinstaller selenium pyvirtualdisplay pyscreenshot
+RUN pip3 install requests chromedriver_autoinstaller selenium pyvirtualdisplay pyscreenshot pyautogui cv2 numpy
 
 
 COPY main.py .
