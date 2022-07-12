@@ -9,7 +9,7 @@ resolution = (1920, 1080)
 # Specify video codec
   
 # Specify name of Output file
-filename = "Recording.avi"
+filename = "Recording.mp4"
   
 # Specify frames rate. We can choose any 
 # value and experiment with it
