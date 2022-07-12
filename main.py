@@ -116,7 +116,7 @@ for i in Files:
 
 
 def stream(): 
-    ffmpeg_stream = 'ffmpeg -f x11grab -s 640x480 -r 24 -i :0.0+100,200 -c:v libx264 -preset superfast -pix_fmt yuv420p -s 640x480 -threads 0 -f avi output.avi'
+    ffmpeg_stream = 'ffmpeg -y -r 30 -f x11grab -s 640x480 -i :94.0 output.mp4'
     args = shlex.split(ffmpeg_stream)
     p = subprocess.Popen(args)
 
@@ -142,7 +142,7 @@ for s in File_Names_List:
         ScreenshotPath = ScreenshotPath.split('.com', 1)[0] + '.png'
         #driver.get('/home/runner/work/ProxyScraper-PY/ProxyScraper-PY/index.html')
         #driver.get("https://marketingpipeline.github.io/Markdown-Tag")
-        exec(open('record.py').read())
+        stream()
         driver.get(Link)
 
         driver.execute_script("document.querySelector('html').style.overflow = 'hidden';")
