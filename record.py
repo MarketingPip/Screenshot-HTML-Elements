@@ -3,14 +3,14 @@ import cv2
 import numpy as np
 import time  
 import pyscreenshot as ImageGrab
-
 from pyvirtualdisplay import Display
 display = Display(visible=0, size=(1200, 1200))
 display.start()
 # Specify resolution
-resolution = (1200, 1200)
+resolution = (1920, 1080)
   
 # Specify video codec
+codec = cv2.VideoWriter_fourcc(*"XVID")
   
 # Specify name of Output file
 filename = "Recording.avi"
@@ -18,8 +18,7 @@ filename = "Recording.avi"
 # Specify frames rate. We can choose any 
 # value and experiment with it
 fps = 60.0
-
-codec = cv2.VideoWriter_fourcc(*"XVID")
+  
   
 # Creating a VideoWriter object
 out = cv2.VideoWriter(filename, codec, fps, resolution)
@@ -32,6 +31,7 @@ cv2.resizeWindow("Live", 480, 270)
 RecordTime = 10  
 Record = True
 while RecordTime < 0:
+    Time = time.sleep(RecordTime)
     # Take screenshot using PyAutoGUI
     img = ImageGrab.grab() 
   
@@ -56,3 +56,4 @@ out.release()
   
 # Destroy all windows
 cv2.destroyAllWindows()
+exit()
