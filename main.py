@@ -6,14 +6,20 @@ import os
 import json
 import sys
 import time
-
+import shlex
+import subprocess
 wait_time = os.environ.get("INPUT_SECONDS")
     
 
 
 
-
-
+info = dict()
+platforms = {
+    'hulu' : { 'login': 'https://secure.hulu.com/account/signin', 'watch': 'http://www.hulu.com/watch/'},
+    'netflix' : { 'login': 'https://www.netflix.com/Login', 'watch': 'http://www.netflix.com/watch/' }
+}
+browser = None
+xvfb = None
 
 PythonScriptPath = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 print(PythonScriptPath)
@@ -109,6 +115,11 @@ for i in Files:
 
 
 
+def stream():
+    global xvfb
+    ffmpeg_stream = '/root/bin/ffmpeg -f x11grab -s 1280x720 -r 24 -i :%d+nomouse -c:v libx264 -preset superfast -pix_fmt yuv420p -s 1280x720 -threads 0 -f flv "%s"' % (xvfb.vdisplay_num)
+    args = shlex.split(ffmpeg_stream)
+    p = subprocess.Popen(args)
 
 # take screenshot with a transparent background
 driver.execute_cdp_cmd("Emulation.setDefaultBackgroundColorOverride", {'color': {'r': 0, 'g': 0, 'b': 0, 'a': 0}})
