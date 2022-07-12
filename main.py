@@ -116,8 +116,7 @@ for i in Files:
 
 
 def stream():
-    global xvfb
-    ffmpeg_stream = '/root/bin/ffmpeg -f x11grab -s 1280x720 -r 24 -i :%d+nomouse -c:v libx264 -preset superfast -pix_fmt yuv420p -s 1280x720 -threads 0 -f flv "%s"' % (xvfb)
+    ffmpeg_stream = '/root/bin/ffmpeg -y -r 30 -g 300 -f x11grab -s 1024x768 -i :99 -vcodec qtrle out.mov'
     args = shlex.split(ffmpeg_stream)
     p = subprocess.Popen(args)
 
