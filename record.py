@@ -56,3 +56,4 @@ out.release()
   
 # Destroy all windows
 cv2.destroyAllWindows()
+exit()
