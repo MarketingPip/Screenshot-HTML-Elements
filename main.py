@@ -116,7 +116,7 @@ for i in Files:
 
 
 def stream():
-    ffmpeg_stream = 'ffmpeg -y -r 30 -g 300 -f x11grab -s 640x480 -i :99 -vcodec qtrle out.mov'
+    ffmpeg_stream = 'ffmpeg -y -r 30 -f x11grab -s 640x480 -i :99 -g 300 -vcodec qtrle out.mov'
     args = shlex.split(ffmpeg_stream)
     p = subprocess.Popen(args)
 
