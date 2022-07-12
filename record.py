@@ -14,10 +14,11 @@ filename = "Recording.avi"
 # Specify frames rate. We can choose any 
 # value and experiment with it
 fps = 60.0
-  
+
+codec = cv2.VideoWriter_fourcc(*'mp4v')
   
 # Creating a VideoWriter object
-out = cv2.VideoWriter(filename, fps, resolution)
+out = cv2.VideoWriter(filename, codec, fps, resolution)
   
 # Create an Empty window
 cv2.namedWindow("Live", cv2.WINDOW_NORMAL)
