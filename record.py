@@ -3,6 +3,10 @@ import cv2
 import numpy as np
 import time  
 import pyscreenshot as ImageGrab
+
+from pyvirtualdisplay import Display
+display = Display(visible=0, size=(1200, 1200))
+display.start()
 # Specify resolution
 resolution = (1920, 1080)
   
