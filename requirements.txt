@@ -2,3 +2,6 @@
  chromedriver-autoinstaller
  selenium
  pyvirtualdisplay
+ pyautogui
+ cv2 
+ numpy
