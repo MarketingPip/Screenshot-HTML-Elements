@@ -24,6 +24,8 @@ RUN pip3 install requests chromedriver_autoinstaller selenium pyvirtualdisplay p
 
 COPY main.py .
 
+COPY record.py .
+
 
 # Set display port and dbus env to avoid hanging
 ENV DISPLAY=:99
