@@ -116,7 +116,7 @@ for i in Files:
 
 
 def stream():
-    ffmpeg_stream = 'ffmpeg -y -r 30 -f x11grab -s 640x480 -i :99 -g 300 -vcodec libx264 out.mkv'
+    ffmpeg_stream = 'ffmpeg -video_size 640x480 -framerate 25 -f x11grab -i :0.0+100,200 output.mp4'
     args = shlex.split(ffmpeg_stream)
     p = subprocess.Popen(args)
 
